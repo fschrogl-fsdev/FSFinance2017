@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- ====================================================================== -->
+	<!-- GENERAL PROJECT INFORMATION -->
+	<!-- ====================================================================== -->
+
+	<!-- Project Configuration -->
+	<name>FSFinance</name>
+	<groupId>at.schrogl.fsfinance</groupId>
+	<artifactId>fsfinance-pom</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<!-- Sub-Projects -->
+	<modules>
+		<module>../fsfinance-web</module>
+	</modules>
+  
+	<properties>
+        <!-- Build Properties -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<compiler.version.source>1.8</compiler.version.source>
+        <compiler.version.target>1.8</compiler.version.target>
+    
+        <!-- Maven Plugin Versions -->
+        <version.maven-compiler-plugin>3.5.1</version.maven-compiler-plugin>
+        <version.maven-javadoc-plugin>2.10.3</version.maven-javadoc-plugin>
+        <version.maven-project-info-reports-plugin>2.9</version.maven-project-info-reports-plugin>
+        <version.maven-license-plugin>2.11</version.maven-license-plugin>
+        <version.maven-release-plugin>2.5.3</version.maven-release-plugin>
+        <version.maven-deploy-plugin>2.8.2</version.maven-deploy-plugin>
+        <version.maven-source-plugin>3.0.0</version.maven-source-plugin>
+        <version.maven-war-plugin>2.6</version.maven-war-plugin>
+        <version.maven-jar-plugin>2.6</version.maven-jar-plugin>
+        <version.maven-changes-plugin>2.11</version.maven-changes-plugin>
+        <version.maven-surefire-plugin>2.19.1</version.maven-surefire-plugin>
+	</properties>
+
+
+	<!-- Source Control Management -->
+	<scm>
+		<developerConnection>scm:git:https://git.schrogl.at/gitblit/r/private/${project.name}.git</developerConnection>
+		<url>https://git.schrogl.at/gitblit/r/private/${project.name}.git</url>
+	</scm>
+
+	<!-- Project Deployment -->
+	<distributionManagement>
+		<repository>
+			<id>atom-nexus</id>
+			<name>ATOM Nexus Release</name>
+			<url>https://git.schrogl.at/nexus/content/repositories/releases/</url>
+		</repository>
+		<site>
+			<id>atom-apache</id>
+			<name>ATOM Javadoc Release</name>
+			<url>file:///srv/http/git.schrogl.at/sites/${project.name}/${project.version}/</url>
+		</site>
+	</distributionManagement>
+	
+	<!-- Issue Management -->
+	<issueManagement>
+		<system>Mantis</system>
+		<url>https://git.schrogl.at/mantisbt/</url>
+	</issueManagement>
+
+	<!-- ====================================================================== -->
+	<!-- BUILD CONFIGURATION -->
+	<!-- ====================================================================== -->
+
+	<build>
+        <plugins>
+            <!-- Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.maven-compiler-plugin}</version>
+                <configuration>
+                    <source>${compiler.version.source}</source>
+                    <target>${compiler.version.target}</target>
+                </configuration>
+            </plugin>
+            
+            <!-- Logging Profile (JBoss/Wildfly) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${version.maven-war-plugin}</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Logging-Profile>${project.name}</Logging-Profile>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+ 
+            <!-- License Header Plugin -->
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${version.maven-license-plugin}</version>
+                <configuration>
+                    <header>${project.basedir}/HEADING</header>
+                    <keywords>
+                        <keyword>GNU General Public License</keyword>
+                    </keywords>
+                    <skipExistingHeaders>true</skipExistingHeaders>
+                    <strictCheck>true</strictCheck>
+                    <includes>
+                        <include>src/main/java/**/*.java</include>
+                        <include>src/test/java/**/*.java</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+ 
+            <!-- Javadoc Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${version.maven-javadoc-plugin}</version>
+                <configuration>
+                    <quiet>true</quiet>
+                    <failOnError>false</failOnError>
+                </configuration>
+            </plugin>
+ 
+            <!-- Surefire Plugin (execute Unit Tests) -->
+            <!-- INFO: Surefire prior v2.9 has a bug when using together with Arquillian (SUREFIRE-743) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${version.maven-surefire-plugin}</version>
+            </plugin>
+        </plugins>
+    </build>
+ 
+    <!-- ====================================================================== -->
+    <!-- RELEASE/DEPLOYMENT CONFIGURATION -->
+    <!-- ====================================================================== -->
+ 
+    <profiles>
+        <profile>
+            <id>jenkins-release</id>
+            <build>
+                <plugins>
+                    <!-- Release Plugin -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <version>${version.maven-release-plugin}</version>
+                        <configuration>
+                            <tagNameFormat>v@{project.version}</tagNameFormat>
+                            <username>${scm.username}</username>
+                            <password>${scm.password}</password>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+ 
+    <!-- ====================================================================== -->
+    <!-- DEPENDENCY MANAGEMENT -->
+    <!-- ====================================================================== -->
+ 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>7.0</version>
+                <scope>provided</scope>
+            </dependency>
+ 
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.19</version>
+                <scope>provided</scope>
+            </dependency>
+	        <dependency>
+				<groupId>org.slf4j</groupId>
+			    <artifactId>slf4j-simple</artifactId>
+			    <version>1.7.19</version>
+			    <scope>test</scope>
+			</dependency>
+ 
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>9.4.1212</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <version>2.3.2</version>
+                <scope>test</scope>
+            </dependency>
+ 
+			<dependency>
+			    <groupId>org.testng</groupId>
+			    <artifactId>testng</artifactId>
+			    <version>6.10</version>
+			    <scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>2.3.0</version>
+				<scope>test</scope>
+			</dependency>
+        </dependencies>
+    </dependencyManagement>
+ 
+    <dependencies>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+	    <dependency>
+	    	<groupId>org.slf4j</groupId>
+	    	<artifactId>slf4j-simple</artifactId>
+	    	<scope>test</scope>
+	    </dependency>
+    </dependencies>
+ 
+    <!-- ====================================================================== -->
+    <!-- SITE CONFIGURATION -->
+    <!-- ====================================================================== -->
+ 
+    <!-- Site Configuration -->
+    <reporting>
+        <plugins>
+            <!-- Site Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${version.maven-javadoc-plugin}</version>
+            </plugin>
+ 
+            <!-- Javadoc Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${version.maven-javadoc-plugin}</version>
+                <configuration>
+                    <quiet>true</quiet>
+                    <failOnError>false</failOnError>
+                </configuration>
+            </plugin>
+ 
+            <!-- Report Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>${version.maven-project-info-reports-plugin}</version>
+                <configuration>
+                    <webAccessUrl>http://git.schrogl.at</webAccessUrl>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>index</report>
+                            <report>plugins</report>
+                            <report>license</report>
+                            <report>project-team</report>
+                            <report>summary</report>
+                            <report>dependencies</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+ 
+    <!-- Project License Information (Report) -->
+    <licenses>
+        <license>
+            <name>GNU General Public License (GPL), Version 3.0</name>
+            <url>http://www.gnu.org/licenses/gpl-3.0-standalone.html</url>
+            <distribution>repo</distribution>
+            <comments>A Copyleft-license from GNU and FSF</comments>
+        </license>
+    </licenses>
+ 
+    <!-- Project Organization Information (Report) -->
+    <organization>
+        <name>FSDev Ltd</name>
+        <url>http://www.schrogl.at</url>
+    </organization>
+ 
+    <!-- Project Developer Information (Report) -->
+    <developers>
+        <developer>
+            <id>-</id>
+            <name>Fritz</name>
+            <email>fsdev@schrogl.at</email>
+            <url>http://fritz.schrogl.at</url>
+            <organization>FSDev Ltd</organization>
+            <organizationUrl>http://www.schrogl.at</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
+    </developers>
+
+</project>
