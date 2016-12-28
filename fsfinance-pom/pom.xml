@@ -11,7 +11,6 @@
 	<!-- ====================================================================== -->
 
 	<!-- Project Configuration -->
-	<name>FSFinance</name>
 	<groupId>at.schrogl.fsfinance</groupId>
 	<artifactId>fsfinance-pom</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
@@ -19,6 +18,8 @@
 
 	<!-- Sub-Projects -->
 	<modules>
+		<module>../fsfinance-persistence</module>
+		<module>../fsfinance-business</module>
 		<module>../fsfinance-web</module>
 	</modules>
   
@@ -87,20 +88,6 @@
                 </configuration>
             </plugin>
             
-            <!-- Logging Profile (JBoss/Wildfly) -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>${version.maven-war-plugin}</version>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Logging-Profile>${project.name}</Logging-Profile>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
- 
             <!-- License Header Plugin -->
             <plugin>
                 <groupId>com.mycila</groupId>
@@ -152,71 +139,89 @@
     <!-- ====================================================================== -->
     <!-- RELEASE/DEPLOYMENT CONFIGURATION -->
     <!-- ====================================================================== -->
- 
-    <profiles>
-        <profile>
-            <id>jenkins-release</id>
-            <build>
-                <plugins>
-                    <!-- Release Plugin -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-release-plugin</artifactId>
-                        <version>${version.maven-release-plugin}</version>
-                        <configuration>
-                            <tagNameFormat>v@{project.version}</tagNameFormat>
-                            <username>${scm.username}</username>
-                            <password>${scm.password}</password>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+
+	<profiles>
+		<profile>
+			<id>jenkins-release</id>
+			<build>
+				<plugins>
+					<!-- Release Plugin -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-release-plugin</artifactId>
+						<version>${version.maven-release-plugin}</version>
+						<configuration>
+							<tagNameFormat>v@{project.version}</tagNameFormat>
+							<username>${scm.username}</username>
+							<password>${scm.password}</password>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
  
     <!-- ====================================================================== -->
     <!-- DEPENDENCY MANAGEMENT -->
     <!-- ====================================================================== -->
- 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>javax</groupId>
-                <artifactId>javaee-api</artifactId>
-                <version>7.0</version>
-                <scope>provided</scope>
-            </dependency>
- 
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>1.7.19</version>
-                <scope>provided</scope>
-            </dependency>
-	        <dependency>
-				<groupId>org.slf4j</groupId>
-			    <artifactId>slf4j-simple</artifactId>
-			    <version>1.7.19</version>
-			    <scope>test</scope>
-			</dependency>
- 
-            <dependency>
-                <groupId>org.postgresql</groupId>
-                <artifactId>postgresql</artifactId>
-                <version>9.4.1212</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hsqldb</groupId>
-                <artifactId>hsqldb</artifactId>
-                <version>2.3.2</version>
-                <scope>test</scope>
-            </dependency>
- 
+
+	<dependencyManagement>
+		<dependencies>
 			<dependency>
-			    <groupId>org.testng</groupId>
-			    <artifactId>testng</artifactId>
-			    <version>6.10</version>
-			    <scope>test</scope>
+				<groupId>javax</groupId>
+				<artifactId>javaee-api</artifactId>
+				<version>7.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>3.1.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.persistence</groupId>
+				<artifactId>javax.persistence</artifactId>
+				<version>2.1.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.transaction</groupId>
+				<artifactId>javax.transaction-api</artifactId>
+				<version>1.2</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.7.19</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>1.7.19</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>9.4.1212</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hsqldb</groupId>
+				<artifactId>hsqldb</artifactId>
+				<version>2.3.2</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.testng</groupId>
+				<artifactId>testng</artifactId>
+				<version>6.10</version>
+				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.mockito</groupId>
@@ -224,28 +229,22 @@
 				<version>2.3.0</version>
 				<scope>test</scope>
 			</dependency>
-        </dependencies>
-    </dependencyManagement>
- 
-    <dependencies>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        
-	    <dependency>
-	    	<groupId>org.slf4j</groupId>
-	    	<artifactId>slf4j-simple</artifactId>
-	    	<scope>test</scope>
-	    </dependency>
-    </dependencies>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
  
     <!-- ====================================================================== -->
     <!-- SITE CONFIGURATION -->

@@ -23,6 +23,24 @@
 		<wicket.version>7.5.0</wicket.version>
 	</properties>
 
+	<build>
+		<plugins>
+			<!-- Logging Profile (JBoss/Wildfly) -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${version.maven-war-plugin}</version>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Logging-Profile>${project.name}</Logging-Profile>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
