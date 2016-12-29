@@ -18,12 +18,13 @@
  
     <body>
         <links>
-            <item name="Bugtracker" href="https://git.schrogl.at/mantisbt" target="_blank" />
             <item name="GIT Repository" href="https://git.schrogl.at/gitblit" target="_blank" />
         </links>
  
         <menu name="Project Documentation">
-            <item name="Introduction" href="introduction.html" />
+            <item name="Intro" href="about.html" />
+            <item name="User Stories" href="userstories.html" />
+            <item name="Technical Debt" href="technicaldebt.html" />
         </menu>
  
         <menu name="Project Reports" ref="reports" />
