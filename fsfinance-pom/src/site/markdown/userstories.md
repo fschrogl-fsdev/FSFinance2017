@@ -1,4 +1,6 @@
-## User stories
+# User stories
+
+## Open
 
 ### US0001: Register as new user
 
@@ -26,3 +28,5 @@ After successful registration a user should be:
 ### US0004: Update/Modify my user profile
 
 ### US0005: (Admin) User account management
+
+## Closed

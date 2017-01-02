@@ -4,4 +4,17 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
 
+	<filter>
+		<filter-name>WicketApplication</filter-name>
+		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
+		<init-param>
+			<param-name>applicationClassName</param-name>
+			<param-value>at.schrogl.fsfinance.web.FSFinance</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>WicketApplication</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 </web-app>

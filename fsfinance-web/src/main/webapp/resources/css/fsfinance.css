@@ -1,0 +1,9 @@
+/*
+ * FSFinance Custom CSS Modifications
+ */
+ 
+.fs-brand-image {
+	height: 100%;
+	vertical-align: text-bottom;
+	padding-right: 0.5em;
+}
