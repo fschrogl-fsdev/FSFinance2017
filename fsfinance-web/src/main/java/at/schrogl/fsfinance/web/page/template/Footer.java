@@ -16,30 +16,40 @@
  */
 package at.schrogl.fsfinance.web.page.template;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.Application;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
+
+import at.schrogl.fsfinance.business.BuildProperties;
 
 public class Footer extends Panel {
 
 	private static final long serialVersionUID = 1L;
 
+	@Inject
+	private BuildProperties buildProperties;
+
 	public Footer(String id) {
 		super(id);
 		addVersion();
-		addCommitId();
+		addBuildInfo();
 		addApplicationMode();
 	}
-	
+
 	private void addVersion() {
-		add(new Label("version", "0.1.0-SNAPSHOT"));
+		add(new Label("version", "version: " + buildProperties.getVersion()));
 	}
-	
-	private void addCommitId() {
-		add(new Label("commitId", "git-basd39438"));
+
+	private void addBuildInfo() {
+		Label buildInfo = new Label("build", buildProperties.getTimestamp());
+		buildInfo.add(new AttributeModifier("title", buildProperties.getRevision()));
+		add(buildInfo);
 	}
-	
+
 	private void addApplicationMode() {
 		add(new Label("appMode", "Mode: DEVELOPMENT"));
 		RuntimeConfigurationType currentAppMode = Application.get().getConfigurationType();

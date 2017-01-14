@@ -20,7 +20,7 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<wicket.version>7.5.0</wicket.version>
+		<wicket.version>7.6.0</wicket.version>
 	</properties>
 
 	<build>
@@ -43,8 +43,24 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>at.schrogl.fsfinance</groupId>
+			<artifactId>fsfinance-persistence</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>at.schrogl.fsfinance</groupId>
+			<artifactId>fsfinance-business</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-core</artifactId>
+			<version>${wicket.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-spring</artifactId>
 			<version>${wicket.version}</version>
 		</dependency>
 	</dependencies>
