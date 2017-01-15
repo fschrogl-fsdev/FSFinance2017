@@ -14,21 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with FSFinance. If not, see <http://www.gnu.org/licenses/>.
  */
-package at.schrogl.fsfinance.web.page;
+package at.schrogl.fsfinance.persistence.dao;
 
-import org.apache.wicket.markup.html.basic.Label;
+import javax.persistence.EntityManager;
 
-import at.schrogl.fsfinance.web.page.template.Template;
+import org.springframework.stereotype.Repository;
 
-public class UserRegistration extends Template {
+@Repository
+public abstract class AbstractDAO<E> {
 
-	private static final long serialVersionUID = 1L;
+	protected EntityManager em;
 
-	public UserRegistration() {
-		setPageTitle("User registration");
+	public abstract E find(Long id);
 
-		add(new Label("pageHeader", "Register a new account"));
-		add(new Label("pageInfo", "To register a new user you have to choose a unique username, provide a valid e-Mail address, for contact purposes, and use a strong password."));
+	public E save(E entity) {
+		return em.merge(entity);
 	}
 
+	public E remove(E entity) {
+		em.remove(entity);
+		return entity;
+	}
+	
 }

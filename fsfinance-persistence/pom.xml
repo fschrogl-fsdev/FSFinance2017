@@ -20,13 +20,76 @@
 	<packaging>jar</packaging>
 
 	<properties>
+		<version.hibernate-maven-plugin>2.0.0</version.hibernate-maven-plugin>
 	</properties>
+
+	<!-- ====================================================================== -->
+	<!-- PROFILE: database -->
+	<!-- ====================================================================== -->
+
+	<profiles>
+		<profile>
+			<id>database</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>de.juplo</groupId>
+						<artifactId>hibernate-maven-plugin</artifactId>
+						<version>${version.hibernate-maven-plugin}</version>
+						<executions>
+							<execution>
+								<phase>process-classes</phase>
+								<goals>
+									<goal>create</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<!-- Only create DDL script, don't actually create database -->
+							<export>false</export>
+
+							<!-- Show DDL script in Maven's output and make it pretty -->
+							<show>true</show>
+							<format>true</format>
+							<outputFile>${project.build.directory}/createdb-${project.version}.sql</outputFile>
+
+							<!-- Database dialect to use and classes to scan for JPA annotations -->
+							<dialect>org.hibernate.dialect.PostgreSQLDialect</dialect>
+							<driver>org.postgresql.Driver</driver>
+							<scanClasses>true</scanClasses>
+							<scanDependencies>none</scanDependencies>
+							<scanTestClasses>false</scanTestClasses>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<!-- ====================================================================== -->
+	<!-- Dependencies -->
+	<!-- ====================================================================== -->
 
 	<dependencies>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>javax.persistence</artifactId>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
 		</dependency>
 	</dependencies>
 
