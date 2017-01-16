@@ -30,7 +30,7 @@ import at.schrogl.fsfinance.persistence.dao.UserDAO;
 @Table(name = "USERS")
 @NamedQueries({
 		@NamedQuery(name = UserDAO.NQ_findByUsername, query = "SELECT u FROM User WHERE u.username = :username"),
-		@NamedQuery(name = UserDAO.NQ_findByEmail, query = "SELECT u FROM User WHERE u.email IN :email") })
+		@NamedQuery(name = UserDAO.NQ_findByEmail, query = "SELECT u FROM User WHERE u.email = :email") })
 public class User {
 
 	private Long id;
@@ -77,13 +77,18 @@ public class User {
 		this.salt = salt;
 	}
 
-	@Column(name = "mail", nullable = false)
+	@Column(name = "mail", unique = true, nullable = false)
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("User[id=%d/username=%s]", id, username);
 	}
 
 }

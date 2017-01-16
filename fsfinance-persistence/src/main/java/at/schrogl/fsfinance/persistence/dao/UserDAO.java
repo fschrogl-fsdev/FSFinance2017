@@ -16,7 +16,6 @@
  */
 package at.schrogl.fsfinance.persistence.dao;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.NoResultException;
@@ -49,10 +48,16 @@ public class UserDAO extends AbstractDAO<User> {
 		}
 	}
 
-	public List<User> findByEmail(String... email) {
+	public Optional<User> findByEmail(String email) {
 		TypedQuery<User> query = em.createNamedQuery(NQ_findByEmail, User.class);
 		query.setParameter("email", email);
-		return query.getResultList();
+
+		try {
+			User foundUser = query.getSingleResult();
+			return Optional.of(foundUser);
+		} catch (NoResultException e) {
+			return Optional.empty();
+		}
 	}
 
 }
