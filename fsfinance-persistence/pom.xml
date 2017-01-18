@@ -21,6 +21,7 @@
 
 	<properties>
 		<version.hibernate-maven-plugin>2.0.0</version.hibernate-maven-plugin>
+		<version.hibernate>5.0.10.Final</version.hibernate>
 	</properties>
 
 	<!-- ====================================================================== -->
@@ -71,17 +72,13 @@
 	<!-- ====================================================================== -->
 
 	<dependencies>
-		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>javax.persistence</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
+		<!-- START Spring Framework -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<exclusions>
 				<exclusion>
+					<!-- Replace Spring's use of commons logging with SLF4J API -->
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
 				</exclusion>
@@ -91,12 +88,30 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+		</dependency>
+		<!-- END Spring Framework -->
 
+		<!-- START Testing Dependencies -->
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${version.hibernate}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- END Testing Dependencies -->
 	</dependencies>
 
 </project>

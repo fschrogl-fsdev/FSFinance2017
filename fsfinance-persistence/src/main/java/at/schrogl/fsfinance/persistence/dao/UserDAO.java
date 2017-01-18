@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
@@ -36,6 +37,7 @@ public class UserDAO extends AbstractDAO<User> {
 		return em.find(User.class, id);
 	}
 
+	@Transactional
 	public Optional<User> findByUsername(String username) {
 		TypedQuery<User> query = em.createNamedQuery(NQ_findByUsername, User.class);
 		query.setParameter("username", username);
@@ -48,6 +50,7 @@ public class UserDAO extends AbstractDAO<User> {
 		}
 	}
 
+	@Transactional
 	public Optional<User> findByEmail(String email) {
 		TypedQuery<User> query = em.createNamedQuery(NQ_findByEmail, User.class);
 		query.setParameter("email", email);
