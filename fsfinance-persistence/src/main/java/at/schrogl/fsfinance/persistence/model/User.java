@@ -29,8 +29,8 @@ import at.schrogl.fsfinance.persistence.dao.UserDAO;
 @Entity
 @Table(name = "USERS")
 @NamedQueries({
-		@NamedQuery(name = UserDAO.NQ_findByUsername, query = "SELECT u FROM User WHERE u.username = :username"),
-		@NamedQuery(name = UserDAO.NQ_findByEmail, query = "SELECT u FROM User WHERE u.email = :email") })
+		@NamedQuery(name = UserDAO.NQ_findByUsername, query = "SELECT u FROM User u WHERE u.username = :username"),
+		@NamedQuery(name = UserDAO.NQ_findByEmail, query = "SELECT u FROM User u WHERE u.email = :email") })
 public class User {
 
 	private Long id;

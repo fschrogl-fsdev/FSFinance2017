@@ -6,13 +6,13 @@
 
 	<persistence-unit name="fsfinanceTest" transaction-type="RESOURCE_LOCAL">
 		<description>Uses an in-memory database for integration tests</description>
-		<provider></provider>
 
 		<class>at.schrogl.fsfinance.persistence.model.User</class>
 
 		<properties>
+			<property name="javax.persistence.schema-generation.database.action" value="create"/>
 			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:mem:fsfinanceDbTest;shutdown=true" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:fsfinanceDbTest;DB_CLOSE_DELAY=-1" />
 			<property name="javax.persistence.jdbc.user" value="sa" />
 			<property name="javax.persistence.jdbc.password" value="" />
 		</properties>

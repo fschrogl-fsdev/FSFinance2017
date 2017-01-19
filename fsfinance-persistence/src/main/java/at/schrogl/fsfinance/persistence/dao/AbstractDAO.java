@@ -18,25 +18,25 @@ package at.schrogl.fsfinance.persistence.dao;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional(readOnly = true)
 public abstract class AbstractDAO<E> {
 
 	@PersistenceContext
 	protected EntityManager em;
 
-	@Transactional
 	public abstract E find(Long id);
 
-	@Transactional
+	@Transactional(readOnly = false)
 	public E save(E entity) {
 		return em.merge(entity);
 	}
 
-	@Transactional
+	@Transactional(readOnly = false)
 	public E remove(E entity) {
 		em.remove(entity);
 		return entity;
