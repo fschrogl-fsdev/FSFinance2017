@@ -18,9 +18,6 @@ package at.schrogl.fsfinance.persistence.dao;
 
 import java.util.Optional;
 
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-
 import org.springframework.stereotype.Repository;
 
 import at.schrogl.fsfinance.persistence.model.User;
@@ -32,32 +29,22 @@ public class UserDAO extends AbstractDAO<User> {
 	public static final String NQ_findByEmail = "User_findByEmail";
 
 	@Override
-	public User find(Long id) {
-		return em.find(User.class, id);
+	public Optional<User> find(Long id) {
+		return Optional.ofNullable(em.find(User.class, id));
 	}
 
 	public Optional<User> findByUsername(String username) {
-		TypedQuery<User> query = em.createNamedQuery(NQ_findByUsername, User.class);
-		query.setParameter("username", username);
-
-		try {
-			User foundUser = query.getSingleResult();
-			return Optional.of(foundUser);
-		} catch (NoResultException e) {
-			return Optional.empty();
-		}
+		checkIllegalArgument(username);
+		return wrapAsOptional(() -> em.createNamedQuery(NQ_findByUsername, User.class)
+				.setParameter("username", username)
+				.getSingleResult());
 	}
 
 	public Optional<User> findByEmail(String email) {
-		TypedQuery<User> query = em.createNamedQuery(NQ_findByEmail, User.class);
-		query.setParameter("email", email);
-
-		try {
-			User foundUser = query.getSingleResult();
-			return Optional.of(foundUser);
-		} catch (NoResultException e) {
-			return Optional.empty();
-		}
+		checkIllegalArgument(email);
+		return wrapAsOptional(() -> em.createNamedQuery(NQ_findByEmail, User.class)
+				.setParameter("email", email)
+				.getSingleResult());
 	}
 
 }

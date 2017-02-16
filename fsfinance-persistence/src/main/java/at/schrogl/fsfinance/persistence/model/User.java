@@ -35,9 +35,19 @@ public class User {
 
 	private Long id;
 	private String username;
-	private String passwordHash;
+	private String password;
 	private String salt;
 	private String email;
+
+	public User() {
+	}
+
+	public User(String username, String password, String salt, String email) {
+		this.username = username;
+		this.password = password;
+		this.salt = salt;
+		this.email = email;
+	}
 
 	@Id
 	@GeneratedValue
@@ -60,12 +70,12 @@ public class User {
 	}
 
 	@Column(name = "password", nullable = false)
-	public String getPasswordHash() {
-		return passwordHash;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setPasswordHash(String passwordHash) {
-		this.passwordHash = passwordHash;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Column(name = "salt", nullable = false)
@@ -77,7 +87,7 @@ public class User {
 		this.salt = salt;
 	}
 
-	@Column(name = "mail", unique = true, nullable = false)
+	@Column(name = "email", unique = true, nullable = false)
 	public String getEmail() {
 		return email;
 	}
