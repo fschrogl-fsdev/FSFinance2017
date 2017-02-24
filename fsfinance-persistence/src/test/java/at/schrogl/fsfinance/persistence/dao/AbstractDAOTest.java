@@ -19,10 +19,10 @@ package at.schrogl.fsfinance.persistence.dao;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
@@ -37,7 +37,7 @@ public class AbstractDAOTest extends AbstractTransactionalTestNGSpringContextTes
 	@PersistenceContext
 	private EntityManager em;
 
-	@Inject
+	@Autowired
 	private TestDao abstractDao;
 
 	@Test(expectedExceptions = IllegalArgumentException.class)
