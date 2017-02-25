@@ -40,7 +40,15 @@
 		<version.maven-jar-plugin>2.6</version.maven-jar-plugin>
 		<version.maven-changes-plugin>2.11</version.maven-changes-plugin>
 		<version.maven-surefire-plugin>2.19.1</version.maven-surefire-plugin>
-		<version.maven-buildnumber-plugin>1.4</version.maven-buildnumber-plugin>
+		<version.maven-failsafe-plugin>2.19.1</version.maven-failsafe-plugin>
+		<version.maven-buildhelper-plugin>3.0.0</version.maven-buildhelper-plugin>
+
+		<!-- Framework/Library Verisons -->
+		<version.spring>4.3.5.RELEASE</version.spring>
+		<version.testng>6.10</version.testng>
+		<version.mockito>2.7.11</version.mockito>
+		<version.hibernate>5.0.10.Final</version.hibernate>
+		<version.slf4j>1.7.19</version.slf4j>
 	</properties>
 
 
@@ -76,8 +84,8 @@
 
 	<build>
 		<plugins>
-			<!-- Compiler Plugin -->
 			<plugin>
+				<!-- Compiler Plugin -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${version.maven-compiler-plugin}</version>
@@ -87,8 +95,43 @@
 				</configuration>
 			</plugin>
 
-			<!-- License Header Plugin -->
 			<plugin>
+				<!-- Build Helper Plugin -->
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>${version.maven-buildhelper-plugin}</version>
+				<executions>
+					<execution>
+						<id>add-test-source</id>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/test-integration/java/</source>
+							</sources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>add-test-resource</id>
+						<phase>generate-test-resources</phase>
+						<goals>
+							<goal>add-test-resource</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>src/test-integration/resources</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<!-- License Header Plugin -->
 				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>
 				<version>${version.maven-license-plugin}</version>
@@ -102,6 +145,7 @@
 					<includes>
 						<include>src/main/java/**/*.java</include>
 						<include>src/test/java/**/*.java</include>
+						<include>src/test-integration/java/**/*.java</include>
 					</includes>
 				</configuration>
 				<executions>
@@ -114,8 +158,8 @@
 				</executions>
 			</plugin>
 
-			<!-- Javadoc Plugin -->
 			<plugin>
+				<!-- Javadoc Plugin -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>${version.maven-javadoc-plugin}</version>
@@ -125,10 +169,10 @@
 				</configuration>
 			</plugin>
 
-			<!-- Surefire Plugin (execute Unit Tests) -->
-			<!-- INFO: Surefire prior v2.9 has a bug when using together with Arquillian 
-				(SUREFIRE-743) -->
 			<plugin>
+				<!-- Surefire Plugin (execute Unit Tests) -->
+				<!-- INFO: Surefire prior v2.9 has a bug when using together with Arquillian 
+					(SUREFIRE-743) -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${version.maven-surefire-plugin}</version>
@@ -145,8 +189,23 @@
 			<id>jenkins-release</id>
 			<build>
 				<plugins>
-					<!-- Release Plugin -->
 					<plugin>
+						<!-- Failsafe Plugin (execute Integration Tests) -->
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>${version.maven-failsafe-plugin}</version>
+						<executions>
+							<execution>
+								<id>execute-integration-tests</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>integration-test</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<!-- Release Plugin -->
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-release-plugin</artifactId>
 						<version>${version.maven-release-plugin}</version>
@@ -168,83 +227,101 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>javax</groupId>
-				<artifactId>javaee-api</artifactId>
-				<version>7.0</version>
-				<scope>provided</scope>
-			</dependency>
-
-			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-framework-bom</artifactId>
-				<version>4.3.5.RELEASE</version>
+				<version>${version.spring}</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-				<version>1.7.19</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-simple</artifactId>
-				<version>1.7.19</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>jcl-over-slf4j</artifactId>
-				<version>1.7.19</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.postgresql</groupId>
 				<artifactId>postgresql</artifactId>
 				<version>9.4.1212</version>
-			</dependency>
-			<dependency>
-				<groupId>com.h2database</groupId>
-				<artifactId>h2</artifactId>
-				<version>1.4.193</version>
-				<scope>test</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.testng</groupId>
-				<artifactId>testng</artifactId>
-				<version>6.10</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-core</artifactId>
-				<version>2.3.0</version>
-				<scope>test</scope>
+				<scope>provided</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<dependencies>
+		<!-- START Provided by AppServer (Wildfly) -->
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
+			<version>${version.slf4j}</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- END Provided by AppServer (Wildfly) -->
 
+		<!-- START Spring Framework -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<exclusions>
+				<exclusion>
+					<!-- Replace Spring's use of commons logging with SLF4J API -->
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${version.slf4j}</version>
+		</dependency>
+		<!-- END Spring Framework -->
+
+		<!-- START Testing -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${version.testng}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>${version.mockito}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
+			<version>${version.slf4j}</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${version.hibernate}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${version.hibernate}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.193</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- END Testing -->
 	</dependencies>
 
 	<!-- ====================================================================== -->

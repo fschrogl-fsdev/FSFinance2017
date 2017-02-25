@@ -14,35 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with FSFinance. If not, see <http://www.gnu.org/licenses/>.
  */
-package at.schrogl.fsfinance.business;
+package at.schrogl.fsfinance.business.configuration;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
+import java.util.Properties;
 
-@Component
-@PropertySource("classpath:build.properties")
-public class BuildProperties {
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
-	@Value("${version}")
-	private String version;
+public class ConfigOptionTest {
 
-	@Value("${revision}")
-	private String revision;
+	@Test
+	public void testAsProperties() {
+		Properties actualProps = ConfigOption.asProperties();
 
-	@Value("${timestamp}")
-	private String timestamp;
-
-	public String getVersion() {
-		return version;
-	}
-
-	public String getRevision() {
-		return revision;
-	}
-
-	public String getTimestamp() {
-		return timestamp;
+		Assert.assertEquals(actualProps.size(), ConfigOption.values().length);
+		for (ConfigOption option : ConfigOption.values()) {
+			Assert.assertTrue(actualProps.containsKey(option.getKey()), "Option key not found in properties: " + option.getKey());
+			Assert.assertEquals(actualProps.getProperty(option.getKey()), option.getDefaultValue());
+		}
 	}
 
 }

@@ -21,7 +21,6 @@
 
 	<properties>
 		<version.hibernate-maven-plugin>2.0.0</version.hibernate-maven-plugin>
-		<version.hibernate>5.0.10.Final</version.hibernate>
 	</properties>
 
 	<!-- ====================================================================== -->
@@ -72,32 +71,10 @@
 	<!-- ====================================================================== -->
 
 	<dependencies>
-		<!-- START Spring Framework -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 		</dependency>
-		<!-- END Spring Framework -->
-
-		<!-- START Testing Dependencies -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${version.hibernate}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${version.hibernate}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- END Testing Dependencies -->
 	</dependencies>
 
 </project>

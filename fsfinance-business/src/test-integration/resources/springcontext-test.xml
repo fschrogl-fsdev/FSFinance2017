@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- Scan package for annotated Spring Beans -->
+	<context:component-scan base-package="at.schrogl.fsfinance" />
+
+	<!-- Enable common annotations in Spring Beans -->
+	<context:annotation-config />
+	
+	<!-- Enable transaction management using annotations -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<beans>
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
+			<property name="driverClassName" value="org.h2.Driver" />
+			<property name="url" value="jdbc:h2:mem:fsfinanceDbTest;DB_CLOSE_DELAY=-1" />
+			<property name="username" value="sa" />
+			<property name="password" value="" />
+			<property name="suppressClose" value="true" />
+		</bean>
+	
+		<bean id="entityManager" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+			<property name="dataSource" ref="dataSource"/>
+			<property name="packagesToScan" value="at.schrogl.fsfinance.persistence.model" />
+			<property name="persistenceProviderClass" value="org.hibernate.jpa.HibernatePersistenceProvider" />
+			<property name="jpaProperties">
+		        <props>
+		            <prop key="javax.persistence.schema-generation.database.action">drop-and-create</prop>
+		            <prop key="hibernate.show_sql">false</prop>
+		            <prop key="hibernate.format_sql">true</prop>
+		            <prop key="hibernate.use_sql_comments">true</prop>
+		        </props>
+		    </property>
+		</bean>
+		
+		<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+			<property name="dataSource" ref="dataSource" />
+		</bean>
+	</beans>
+	
+</beans>
