@@ -39,7 +39,7 @@ import at.schrogl.fsfinance.persistence.model.User;
  * @author Fritz Schrogl
  * @since 0.1.0
  */
-@ContextConfiguration("classpath:springcontext-test.xml")
+@ContextConfiguration("classpath:applicationContext-test.xml")
 public class UserManagementIT extends AbstractTransactionalTestNGSpringContextTests {
 
 	public static final String TABLENAME_USER = "users";
