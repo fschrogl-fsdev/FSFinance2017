@@ -19,7 +19,7 @@ package at.schrogl.fsfinance.web;
 import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import at.schrogl.fsfinance.web.page.UserRegistration;
 
@@ -28,12 +28,8 @@ public class FSFinance extends WebApplication {
 	@Override
 	protected void init() {
 		super.init();
-
-		AnnotationConfigApplicationContext springCtx = new AnnotationConfigApplicationContext();
-		springCtx.scan("at.schrogl.fsfinance");
-		springCtx.refresh();
-
-		getComponentInstantiationListeners().add(new SpringComponentInjector(this, springCtx));
+		ClassPathXmlApplicationContext springAppCtx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		getComponentInstantiationListeners().add(new SpringComponentInjector(this, springAppCtx));
 	}
 
 	@Override

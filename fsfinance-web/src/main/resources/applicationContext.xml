@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+						http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
+
+	<!-- Scan package for annotated Spring Beans -->
+	<context:component-scan base-package="at.schrogl.fsfinance" />
+
+	<!-- Enable common annotations in Spring Beans -->
+	<context:annotation-config />
+	
+	<!-- Enable transaction management using annotations -->
+	<tx:annotation-driven />
+
+	<beans>
+		<jee:jndi-lookup id="dataSource" jndi-name="java:/global/datasources/fsfinance" />
+		<jee:jndi-lookup id="entityManagerFactory" jndi-name="java:app/EntityManagerFactory" />
+<!-- 		<jee:jndi-lookup id="entityManager" jndi-name="java:app/EntityManager" /> -->
+		<tx:jta-transaction-manager />
+	</beans>
+	
+</beans>

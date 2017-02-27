@@ -24,7 +24,7 @@ import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import at.schrogl.fsfinance.business.BuildProperties;
+import at.schrogl.fsfinance.business.configuration.BuildProperties;
 
 public class Footer extends Panel {
 

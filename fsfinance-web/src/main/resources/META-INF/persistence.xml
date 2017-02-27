@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+	version="2.1">
+
+	<persistence-unit name="fsfinance" transaction-type="JTA">
+		<jta-data-source>java:/global/datasources/fsfinance</jta-data-source>
+		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+
+		<properties>
+			<!-- Enable EMF + EM in JNDI so that Spring can look it up from there. See: https://docs.jboss.org/author/display/WFLY10/JPA+Reference+Guide -->
+			<property name="jboss.entity.manager.factory.jndi.name" value="java:app/EntityManagerFactory" />
+			<property name="jboss.entity.manager.jndi.name" value="java:app/EntityManager" />
+
+			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.use_sql_comments" value="true" />
+		</properties>
+	</persistence-unit>
+
+</persistence>
