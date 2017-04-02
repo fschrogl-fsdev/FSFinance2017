@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
 
 import at.schrogl.fsfinance.business.configuration.AppConfig;
 import at.schrogl.fsfinance.business.configuration.ConfigOption;
-import at.schrogl.fsfinance.persistence.model.User;
+import at.schrogl.fsfinance.persistence.entity.User;
 
 public class PasswordHasherTest {
 

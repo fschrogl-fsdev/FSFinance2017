@@ -32,7 +32,7 @@ public interface Constants {
 	static final String APP_NAME = "FSFinance";
 
 	/** (Optional) Environment property to look up path to custom configuration file */
-	static final String CONFIG_LOOKUP = "fsfinance.config";
+	static final String CONFIG_LOOKUP = "fsfinanceConfig";
 
 	/** The application's business logger name (can be used to configure log filtering) */
 	static final String BUSINESS_LOGGER_NAME = "business-logger";

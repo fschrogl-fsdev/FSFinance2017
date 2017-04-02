@@ -17,18 +17,29 @@
 package at.schrogl.fsfinance.web.page;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.StatelessLink;
 
-import at.schrogl.fsfinance.web.page.template.Template;
+import at.schrogl.fsfinance.web.page.template.TemplatePage;
 
-public class UserRegistration extends Template {
+public class HomePage extends TemplatePage {
 
 	private static final long serialVersionUID = 1L;
 
-	public UserRegistration() {
-		setPageTitle("User registration");
+	public HomePage() {
+		setPageTitle("Home");
 
-		add(new Label("pageHeader", "Register a new account"));
-		add(new Label("pageInfo", "To register a new user you have to choose a unique username, provide a valid e-Mail address, for contact purposes, and use a strong password."));
+		add(new Label("pageHeader", "Home"));
+		add(new Label("pageInfo", "This is a placeholder page for a logged-in user's home/dashboard."));
+
+		add(new StatelessLink<Void>("linkRegistration") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				setResponsePage(UserRegistrationPage.class);
+			}
+		});
 	}
 
 }

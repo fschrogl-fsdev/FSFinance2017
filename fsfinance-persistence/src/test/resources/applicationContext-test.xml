@@ -27,7 +27,7 @@
 	
 		<bean id="entityManager" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 			<property name="dataSource" ref="dataSource"/>
-			<property name="packagesToScan" value="at.schrogl.fsfinance.persistence.model" />
+			<property name="packagesToScan" value="at.schrogl.fsfinance.persistence.entity" />
 			<property name="persistenceProviderClass" value="org.hibernate.jpa.HibernatePersistenceProvider" />
 			<property name="jpaProperties">
 		        <props>

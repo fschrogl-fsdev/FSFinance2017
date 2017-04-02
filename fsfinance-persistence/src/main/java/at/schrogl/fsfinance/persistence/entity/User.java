@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with FSFinance. If not, see <http://www.gnu.org/licenses/>.
  */
-package at.schrogl.fsfinance.persistence.model;
+package at.schrogl.fsfinance.persistence.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,7 +51,7 @@ public class User {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "id", unique = true, nullable = false)
+	@Column(name = "usr_id", unique = true, nullable = false)
 	public Long getId() {
 		return id;
 	}
@@ -60,7 +60,7 @@ public class User {
 		this.id = id;
 	}
 
-	@Column(name = "username", unique = true, nullable = false)
+	@Column(name = "usr_username", unique = true, nullable = false)
 	public String getUsername() {
 		return username;
 	}
@@ -69,7 +69,7 @@ public class User {
 		this.username = username;
 	}
 
-	@Column(name = "password", nullable = false)
+	@Column(name = "usr_password", nullable = false)
 	public String getPassword() {
 		return password;
 	}
@@ -78,7 +78,7 @@ public class User {
 		this.password = password;
 	}
 
-	@Column(name = "salt", nullable = false)
+	@Column(name = "usr_salt", nullable = false)
 	public String getSalt() {
 		return salt;
 	}
@@ -87,7 +87,7 @@ public class User {
 		this.salt = salt;
 	}
 
-	@Column(name = "email", unique = true, nullable = false)
+	@Column(name = "usr_email", unique = true, nullable = false)
 	public String getEmail() {
 		return email;
 	}

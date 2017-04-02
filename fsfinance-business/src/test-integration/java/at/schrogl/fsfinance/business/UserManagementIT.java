@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 
 import at.schrogl.fsfinance.business.exception.UserAlreadyExistsException;
 import at.schrogl.fsfinance.business.exception.UserAlreadyExistsException.OffendingProperty;
-import at.schrogl.fsfinance.persistence.model.User;
+import at.schrogl.fsfinance.persistence.entity.User;
 
 /**
  * Integration test for {@link UserManagement}

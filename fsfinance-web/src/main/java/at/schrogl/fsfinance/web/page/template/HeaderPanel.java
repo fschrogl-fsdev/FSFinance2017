@@ -16,31 +16,34 @@
  */
 package at.schrogl.fsfinance.web.page.template;
 
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.devutils.stateless.StatelessComponent;
+import org.apache.wicket.markup.html.link.StatelessLink;
+import org.apache.wicket.markup.html.panel.Panel;
 
-public abstract class Template extends WebPage {
+import at.schrogl.fsfinance.web.page.HomePage;
+
+@StatelessComponent
+public class HeaderPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
 
-	protected Header header;
-	protected Footer footer;
-
-	public Template() {
-		add(header = new Header("header"));
-		add(footer = new Footer("footer"));
+	public HeaderPanel(String id) {
+		super(id);
 	}
 
-	protected Header getHeader() {
-		return header;
-	}
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 
-	protected Footer getFooter() {
-		return footer;
-	}
-	
-	protected void setPageTitle(String title) {
-		add(new Label("title", title));
+		add(new StatelessLink<Void>("link-logo") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				setResponsePage(HomePage.class);
+			}
+		});
 	}
 
 }

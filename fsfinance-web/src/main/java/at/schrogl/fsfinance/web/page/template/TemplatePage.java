@@ -16,14 +16,31 @@
  */
 package at.schrogl.fsfinance.web.page.template;
 
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 
-public class Header extends Panel {
+public abstract class TemplatePage extends WebPage {
 
 	private static final long serialVersionUID = 1L;
 
-	public Header(String id) {
-		super(id);
+	protected HeaderPanel header;
+	protected FooterPanel footer;
+
+	public TemplatePage() {
+		add(header = new HeaderPanel("header"));
+		add(footer = new FooterPanel("footer"));
+	}
+
+	protected HeaderPanel getHeader() {
+		return header;
+	}
+
+	protected FooterPanel getFooter() {
+		return footer;
+	}
+
+	protected void setPageTitle(String title) {
+		add(new Label("title", title));
 	}
 
 }

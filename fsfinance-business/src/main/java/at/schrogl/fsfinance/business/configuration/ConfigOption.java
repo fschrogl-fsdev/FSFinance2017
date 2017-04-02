@@ -21,7 +21,7 @@ import java.util.Properties;
 public enum ConfigOption {
 
 	BUSINESSLOGGER_NAME("logger.business.name", "business-logger"),
-	REGISTRATION_ENABLED("registration.enabled", Boolean.FALSE.toString()),
+	REGISTRATION_ENABLED("registration.enabled", Boolean.TRUE.toString()),
 	PASSWORD_HASH_ALGO("security.password.hashalgo", "SHA-256");
 
 	private final String key;

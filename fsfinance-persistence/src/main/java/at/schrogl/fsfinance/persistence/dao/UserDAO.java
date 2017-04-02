@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import at.schrogl.fsfinance.persistence.model.User;
+import at.schrogl.fsfinance.persistence.entity.User;
 
 @Repository
 public class UserDAO extends AbstractDAO<User> {

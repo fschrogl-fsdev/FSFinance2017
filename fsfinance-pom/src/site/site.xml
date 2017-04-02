@@ -18,11 +18,13 @@
  
     <body>
         <links>
+            <item name="Home" href="index.html" />
             <item name="GIT Repository" href="https://git.schrogl.at/gitblit" target="_blank" />
         </links>
  
         <menu name="Project Documentation">
             <item name="Intro" href="about.html" />
+            <item name="Getting Started" href="gettingstarted.html" />
             <item name="User Stories" href="userstories.html" />
             <item name="Technical Debt" href="technicaldebt.html" />
         </menu>

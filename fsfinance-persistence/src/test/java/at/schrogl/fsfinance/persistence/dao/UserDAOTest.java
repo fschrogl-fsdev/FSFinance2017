@@ -33,7 +33,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import at.schrogl.fsfinance.persistence.model.User;
+import at.schrogl.fsfinance.persistence.entity.User;
 
 @ContextConfiguration("classpath:applicationContext-test.xml")
 @Sql(scripts = "classpath:/testdata/UserDAOTest.sql")

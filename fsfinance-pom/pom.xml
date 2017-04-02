@@ -46,9 +46,12 @@
 		<!-- Framework/Library Verisons -->
 		<version.spring>4.3.5.RELEASE</version.spring>
 		<version.testng>6.10</version.testng>
-		<version.mockito>2.7.11</version.mockito>
+		<version.mockito>2.7.19</version.mockito>
 		<version.hibernate>5.0.10.Final</version.hibernate>
 		<version.slf4j>1.7.19</version.slf4j>
+		<version.postgresql>9.4.1212</version.postgresql>
+		<version.h2>1.4.194</version.h2>
+		<version.jpa>2.1.0</version.jpa>
 	</properties>
 
 
@@ -197,7 +200,7 @@
 						<executions>
 							<execution>
 								<id>execute-integration-tests</id>
-								<phase>verify</phase>
+								<phase>test</phase>
 								<goals>
 									<goal>integration-test</goal>
 								</goals>
@@ -235,93 +238,65 @@
 			</dependency>
 
 			<dependency>
+				<groupId>org.eclipse.persistence</groupId>
+				<artifactId>javax.persistence</artifactId>
+				<version>${version.jpa}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-entitymanager</artifactId>
+				<version>${version.hibernate}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>org.postgresql</groupId>
 				<artifactId>postgresql</artifactId>
-				<version>9.4.1212</version>
-				<scope>provided</scope>
+				<version>%{version.postgresql}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.h2database</groupId>
+				<artifactId>h2</artifactId>
+				<version>${version.h2}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${version.slf4j}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>${version.slf4j}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.testng</groupId>
+				<artifactId>testng</artifactId>
+				<version>${version.testng}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>${version.mockito}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<dependencies>
-		<!-- START Provided by AppServer (Wildfly) -->
-		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>7.0</version>
-			<scope>provided</scope>
-		</dependency>
+		<!-- The following dependencies are implicitly provided for each deployment 
+			on JBoss EAP/Wildfly application servers. These are the targeted runtime 
+			environments, hence we pre-configure these dependencies for all Maven modules -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>${version.slf4j}</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- END Provided by AppServer (Wildfly) -->
-
-		<!-- START Spring Framework -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<exclusions>
-				<exclusion>
-					<!-- Replace Spring's use of commons logging with SLF4J API -->
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${version.slf4j}</version>
-		</dependency>
-		<!-- END Spring Framework -->
-
-		<!-- START Testing -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>${version.testng}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>${version.mockito}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>${version.slf4j}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${version.hibernate}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${version.hibernate}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.4.193</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- END Testing -->
 	</dependencies>
 
 	<!-- ====================================================================== -->

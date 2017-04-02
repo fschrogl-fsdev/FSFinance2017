@@ -28,7 +28,6 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -38,13 +37,23 @@ import org.springframework.stereotype.Component;
  * <p>
  * The application uses a built-in default configuration, which can be overriden (full or partially) by specifing a path to a custom
  * configuration file (in Java {@link Properties} file format). This property must use the key {@value Constants#CONFIG_LOOKUP} and can be
- * defined in multiple locations. Spring's {@link Environment#getProperty(String)} is used to retrieve this optionally specified property. See
- * Spring's API-doc for further information.
+ * defined in multiple locations. Spring's {@link Environment#getProperty(String)} is used to retrieve this optionally specified property.
+ * <p>
+ * Spring is initialized in MVC/Web mode, hence Spring's {@link StandardServletEnvironment} is used as environment abstract. Therefore
+ * the custom config property is search in the following locations and in the given order (from top to bottom):
+ * <ul>
+ * <li>Servlet Config Parameters</li>
+ * <li>Servlet Context Parameters (web.xml's context-param)</li>
+ * <li>JNDI (from java:comp/env/)</li>
+ * <li>JVM System Properties (-D command-line arguments)</li>
+ * <li>JVM System Environment (env variables)</li>
+ * </ul>
  * 
  * @author Fritz Schrogl
  * @since 0.1.0
  * 
  * @see AbstractEnvironment
+ * @see StandardServletEnvironment
  */
 @Component
 public class AppConfig {
@@ -54,11 +63,10 @@ public class AppConfig {
 	private Properties configuration;
 
 	@Autowired
-	private ApplicationContext ctx;
+	private Environment environment;
 
 	@PostConstruct
 	public void initialize() throws NamingException, IOException {
-		Environment environment = ctx.getEnvironment();
 		String customConfigLocation = environment.getProperty(Constants.CONFIG_LOOKUP);
 
 		if (customConfigLocation == null) {

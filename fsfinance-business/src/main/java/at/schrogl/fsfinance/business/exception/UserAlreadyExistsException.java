@@ -18,7 +18,7 @@ package at.schrogl.fsfinance.business.exception;
 
 import java.util.Objects;
 
-import at.schrogl.fsfinance.persistence.model.User;
+import at.schrogl.fsfinance.persistence.entity.User;
 
 public class UserAlreadyExistsException extends Exception {
 

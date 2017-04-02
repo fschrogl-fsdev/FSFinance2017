@@ -4,6 +4,12 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
 
+	<!-- Initializes Spring MVC (Web Application Context) -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- Initialize Apache Wicket Framework -->
 	<filter>
 		<filter-name>WicketApplication</filter-name>
 		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
@@ -16,5 +22,12 @@
 		<filter-name>WicketApplication</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
+	<!-- Bind global JNDI resource to application-scoped JNDI namespace -->
+	<resource-ref>
+		<res-ref-name>java:comp/env/fsfinanceConfig</res-ref-name>
+		<res-type>java.lang.String</res-type>
+		<lookup-name>java:global/fsfinanceConfig</lookup-name>
+	</resource-ref>
 
 </web-app>

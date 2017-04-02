@@ -17,24 +17,28 @@
 package at.schrogl.fsfinance.web;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import at.schrogl.fsfinance.web.page.UserRegistration;
+import at.schrogl.fsfinance.web.page.HomePage;
 
 public class FSFinance extends WebApplication {
 
 	@Override
 	protected void init() {
 		super.init();
-		ClassPathXmlApplicationContext springAppCtx = new ClassPathXmlApplicationContext("applicationContext.xml");
-		getComponentInstantiationListeners().add(new SpringComponentInjector(this, springAppCtx));
+		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
+
+		if (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT) {
+			getComponentPostOnBeforeRenderListeners().add(new StatelessChecker());
+		}
 	}
 
 	@Override
 	public Class<? extends Page> getHomePage() {
-		return UserRegistration.class;
+		return HomePage.class;
 	}
 
 }

@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 
 import at.schrogl.fsfinance.business.configuration.AppConfig;
 import at.schrogl.fsfinance.business.configuration.ConfigOption;
-import at.schrogl.fsfinance.persistence.model.User;
+import at.schrogl.fsfinance.persistence.entity.User;
 
 @Component
 public class PasswordHasher {

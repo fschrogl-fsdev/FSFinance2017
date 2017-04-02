@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+</head>
+<body>
+	<wicket:panel>
+		<div wicket:id="content"></div>
+	</wicket:panel>
+	
+	<wicket:fragment wicket:id="fragment.footerDeployment">
+		<div class="container-fluid">
+			<hr>
+			<div class="text-muted">
+				<small>FSDev &#169; 2017</small>
+				<small wicket:id="version" class="pull-right">[version]</small>
+			</div>
+		</div>
+	</wicket:fragment>
+	
+	<wicket:fragment wicket:id="fragment.footerDevelopment">
+		<div class="container-fluid">
+			<hr>
+			<div class="text-muted">
+				<small class="text-danger">DEVELOPMENT Mode active!</small>
+				<small class="pull-right">
+					<span wicket:id="version">[version]</span> / <abbr wicket:id="build">[timestamp]</abbr>
+				</small>
+			</div>
+			<br>
+			
+			<div class="bg-warning">
+				<div wicket:id="feedbackPanel"></div>
+			</div>
+		</div>
+	</wicket:fragment>
+</body>
+</html>

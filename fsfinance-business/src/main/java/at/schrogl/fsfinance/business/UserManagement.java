@@ -30,7 +30,7 @@ import at.schrogl.fsfinance.business.exception.UserAlreadyExistsException.Offend
 import at.schrogl.fsfinance.business.support.BusinessLogger;
 import at.schrogl.fsfinance.business.support.PasswordHasher;
 import at.schrogl.fsfinance.persistence.dao.UserDAO;
-import at.schrogl.fsfinance.persistence.model.User;
+import at.schrogl.fsfinance.persistence.entity.User;
 
 @Component
 public class UserManagement {

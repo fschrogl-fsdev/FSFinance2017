@@ -29,7 +29,7 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import at.schrogl.fsfinance.persistence.model.User;
+import at.schrogl.fsfinance.persistence.entity.User;
 
 @ContextConfiguration("classpath:applicationContext-test.xml")
 public class AbstractDAOTest extends AbstractTransactionalTestNGSpringContextTests {
