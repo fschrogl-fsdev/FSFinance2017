@@ -35,15 +35,15 @@ public class BusinessLogger {
 	}
 
 	public void info(Object subject, String msg, Object... args) {
-		LOG.info("{} " + msg, subject, args);
+		LOG.info("{} | " + msg, subject, args);
 	}
 
 	public void warn(Object subject, String msg, Object... args) {
-		LOG.warn("{} " + msg, subject, args);
+		LOG.warn("{} | " + msg, subject, args);
 	}
 
 	public void error(Object subject, String msg, Object... args) {
-		LOG.error("{} " + msg, subject, args);
+		LOG.error("{} | " + msg, subject, args);
 	}
 
 }

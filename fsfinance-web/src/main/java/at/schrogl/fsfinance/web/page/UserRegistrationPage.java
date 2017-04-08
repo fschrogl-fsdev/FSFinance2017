@@ -16,19 +16,25 @@
  */
 package at.schrogl.fsfinance.web.page;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Localizer;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.StringValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.schrogl.fsfinance.business.UserManagement;
 import at.schrogl.fsfinance.business.configuration.AppConfig;
@@ -43,39 +49,49 @@ public class UserRegistrationPage extends TemplatePage {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final Logger LOG = LoggerFactory.getLogger(UserRegistrationPage.class);
+
 	@SpringBean
 	private AppConfig config;
 
 	@SpringBean
 	private UserManagement userMgmt;
 
-	private Form<UserRegistrationInfo> form;
+	private Form<UserRegistrationInfo> submitForm;
+	private TextField<String> usernameField;
+	private EmailTextField emailField;
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
 
-		setPageTitle(getString("registration.pageTitle"));
-		add(new Label("pageHeader", getString("registration.heading")));
+		add(createPageHeaders());
+		add(createPageInfoLabel());
 
-		createPageInfoLabel();
-		createForm();
-		createFormFields();
-		createCancelButton();
+		submitForm = createForm();
+		usernameField = createUsername(submitForm);
+		emailField = createEmailField(submitForm);
+		createPasswordFields(submitForm);
+		add(submitForm);
 	}
 
-	private void createPageInfoLabel() {
+	private Component createPageHeaders() {
+		setPageTitle(getString("registration.pageTitle"));
+		return new Label("pageHeader", getString("registration.heading"));
+	}
+
+	private Component createPageInfoLabel() {
 		if (isRegistrationEnabled()) {
-			add(new Label("pageInfo", getString("registration.text")));
+			return new Label("pageInfo", getString("registration.text"));
 		} else {
-			Label pageInfoLabel = new Label("pageInfo", getString("registration.text.disabled"));
-			pageInfoLabel.add(AttributeModifier.append("class", "text-danger"));
-			add(pageInfoLabel);
+			return new Label("pageInfo", getString("registration.text.disabled"))
+					.add(AttributeModifier.append("class", "text-danger"));
 		}
 	}
 
-	private void createForm() {
-		form = new Form<UserRegistrationInfo>("form", new CompoundPropertyModel<UserRegistrationInfo>(new UserRegistrationInfo())) {
+	private Form<UserRegistrationInfo> createForm() {
+		Form<UserRegistrationInfo> form = new Form<UserRegistrationInfo>("form",
+				new CompoundPropertyModel<UserRegistrationInfo>(new UserRegistrationInfo())) {
 
 			private static final long serialVersionUID = 1L;
 
@@ -83,70 +99,36 @@ public class UserRegistrationPage extends TemplatePage {
 			protected void onSubmit() {
 				super.onSubmit();
 
-				// TODO validate
-
 				User newUser = new User();
 				newUser.setUsername(getModelObject().getUsername());
 				newUser.setEmail(getModelObject().getEmail());
 
 				try {
 					newUser = userMgmt.createUserAccount(newUser, getModelObject().getPassword());
-				} catch (UserAlreadyExistsException e) {
-					e.printStackTrace();
+				} catch (UserAlreadyExistsException uae) {
+					Map<String, String> variables = new HashMap<>();
+
+					switch (uae.getReason()) {
+					case USERNAME_NOT_UNIQUE:
+						variables.put("username", uae.getNewUser().getUsername());
+						usernameField.error(new ValidationError(getString("registration.username.error.notUnique", Model.ofMap(variables))));
+						break;
+
+					case EMAIL_NOT_UNIQUE:
+						variables.put("email", uae.getNewUser().getEmail());
+						emailField.error(new ValidationError(getString("registration.email.error.notUnique", Model.ofMap(variables))));
+						break;
+
+					default:
+						LOG.error("Error handling for offending property not defined!", uae);
+						submitForm.error(getString("registration.error"));
+					}
 				}
 			}
-
-			@Override
-			protected void onError() {
-				super.onError();
-			}
 		};
-
 		form.setVisible(isRegistrationEnabled());
-		add(form);
-	}
 
-	private void createFormFields() {
-		createUsername();
-		createEmail();
-		createPassword();
-	}
-
-	private void createUsername() {
-		TextField<String> username = new TextField<>("username");
-		username.setLabel(Model.of(getString("registration.username.label")));
-		username.add(AttributeModifier.replace("placeholder", getString("registration.username.placeholder")));
-		username.setRequired(true);
-		username.add(StringValidator.lengthBetween(5, 20));
-		username.add(new StringInputValidator("[a-zA-z]+[a-zA-z0-9]+", "registration.username.error.pattern"));
-		form.add(username);
-	}
-
-	private void createEmail() {
-		EmailTextField email = new EmailTextField("email");
-		email.setLabel(Model.of(getString("registration.email.label")));
-		email.setRequired(true);
-		form.add(email);
-	}
-
-	private void createPassword() {
-		PasswordTextField password = new PasswordTextField("password");
-		password.setLabel(Model.of("registration.password.label"));
-		password.add(AttributeModifier.replace("placeholder", getString("registration.password.placeholder")));
-		password.add(StringValidator.minimumLength(8));
-		form.add(password);
-
-		PasswordTextField passwordRepeated = new PasswordTextField("passwordRepeated");
-		passwordRepeated.add(AttributeModifier.replace("placeholder", getString("registration.passwordRepeat.placeholder")));
-		form.add(passwordRepeated);
-
-		EqualPasswordInputValidator equalPasswordValidator = new EqualPasswordInputValidator(password, passwordRepeated);
-		equalPasswordValidator.error(password, "registration.password.error.notEqual");
-		form.add(equalPasswordValidator);
-	}
-
-	private void createCancelButton() {
-		form.add(new Link<Void>("cancel") {
+		form.add(new StatelessLink<Void>("cancel") {
 
 			private static final long serialVersionUID = 1L;
 
@@ -155,6 +137,58 @@ public class UserRegistrationPage extends TemplatePage {
 				setResponsePage(HomePage.class);
 			}
 		});
+
+		return form;
+	}
+
+	private TextField<String> createUsername(Form<?> form) {
+		Map<String, Object> validationValues = new HashMap<>();
+		validationValues.put("min", 5);
+		validationValues.put("max", 20);
+
+		TextField<String> username = new TextField<>("username");
+		username.setLabel(Model.of(getString("registration.username.label")));
+		username.add(AttributeModifier.replace("placeholder", getString("registration.username.placeholder", Model.ofMap(validationValues))));
+		username.add(StringValidator.lengthBetween((int) validationValues.get("min"), (int) validationValues.get("max")));
+		username.add(new StringInputValidator("[a-zA-z]+[a-zA-z0-9]+", "registration.username.error.pattern"));
+		username.setRequired(true);
+		form.add(username);
+		return username;
+	}
+
+	private EmailTextField createEmailField(Form<?> form) {
+		EmailTextField email = new EmailTextField("email");
+		email.setLabel(Model.of(getString("registration.email.label")));
+		email.setRequired(true);
+		form.add(email);
+		return email;
+	}
+
+	private void createPasswordFields(Form<?> form) {
+		Map<String, Object> validationValues = new HashMap<>();
+		validationValues.put("min", 8);
+
+		PasswordTextField password = new PasswordTextField("password");
+		password.setLabel(Model.of(getString("registration.password.label")));
+		password.add(AttributeModifier.replace("placeholder", getString("registration.password.placeholder", Model.ofMap(validationValues))));
+		password.add(StringValidator.minimumLength((int) validationValues.get("min")));
+		form.add(password);
+
+		PasswordTextField passwordRepeated = new PasswordTextField("passwordRepeated");
+		passwordRepeated.add(AttributeModifier.replace("placeholder", getString("registration.passwordRepeat.placeholder")));
+		passwordRepeated.setRequired(false);
+		form.add(passwordRepeated);
+
+		EqualPasswordInputValidator equalPasswordValidator = new EqualPasswordInputValidator(password, passwordRepeated) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected String resourceKey() {
+				return "registration.password.error.notEqual";
+			}
+		};
+		form.add(equalPasswordValidator);
 	}
 
 	private boolean isRegistrationEnabled() {
