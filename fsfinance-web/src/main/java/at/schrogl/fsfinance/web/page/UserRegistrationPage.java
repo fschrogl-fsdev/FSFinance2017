@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.bean.validation.PropertyValidator;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.Form;
@@ -30,9 +31,10 @@ import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator
 import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.ValidationError;
-import org.apache.wicket.validation.validator.StringValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +42,6 @@ import at.schrogl.fsfinance.business.UserManagement;
 import at.schrogl.fsfinance.business.configuration.AppConfig;
 import at.schrogl.fsfinance.business.configuration.ConfigOption;
 import at.schrogl.fsfinance.business.exception.UserAlreadyExistsException;
-import at.schrogl.fsfinance.persistence.entity.User;
 import at.schrogl.fsfinance.web.model.UserRegistrationInfo;
 import at.schrogl.fsfinance.web.page.template.TemplatePage;
 import at.schrogl.fsfinance.web.validator.StringInputValidator;
@@ -99,12 +100,9 @@ public class UserRegistrationPage extends TemplatePage {
 			protected void onSubmit() {
 				super.onSubmit();
 
-				User newUser = new User();
-				newUser.setUsername(getModelObject().getUsername());
-				newUser.setEmail(getModelObject().getEmail());
-
 				try {
-					newUser = userMgmt.createUserAccount(newUser, getModelObject().getPassword());
+					userMgmt.createUserAccount(getModelObject().getUser(), getModelObject().getPassword());
+					setResponsePage(WebApplication.get().getHomePage());
 				} catch (UserAlreadyExistsException uae) {
 					Map<String, String> variables = new HashMap<>();
 
@@ -120,6 +118,7 @@ public class UserRegistrationPage extends TemplatePage {
 						break;
 
 					default:
+						// TODO Generic error handling
 						LOG.error("Error handling for offending property not defined!", uae);
 						submitForm.error(getString("registration.error"));
 					}
@@ -141,37 +140,27 @@ public class UserRegistrationPage extends TemplatePage {
 		return form;
 	}
 
-	private TextField<String> createUsername(Form<?> form) {
-		Map<String, Object> validationValues = new HashMap<>();
-		validationValues.put("min", 5);
-		validationValues.put("max", 20);
-
-		TextField<String> username = new TextField<>("username");
+	private TextField<String> createUsername(Form<UserRegistrationInfo> form) {
+		TextField<String> username = new TextField<>("username", PropertyModel.of(form.getModelObject(), "user.username"));
 		username.setLabel(Model.of(getString("registration.username.label")));
-		username.add(AttributeModifier.replace("placeholder", getString("registration.username.placeholder", Model.ofMap(validationValues))));
-		username.add(StringValidator.lengthBetween((int) validationValues.get("min"), (int) validationValues.get("max")));
 		username.add(new StringInputValidator("[a-zA-z]+[a-zA-z0-9]+", "registration.username.error.pattern"));
-		username.setRequired(true);
+		username.add(new PropertyValidator<>());
 		form.add(username);
 		return username;
 	}
 
-	private EmailTextField createEmailField(Form<?> form) {
-		EmailTextField email = new EmailTextField("email");
+	private EmailTextField createEmailField(Form<UserRegistrationInfo> form) {
+		EmailTextField email = new EmailTextField("email", PropertyModel.of(form.getModelObject(), "user.email"));
 		email.setLabel(Model.of(getString("registration.email.label")));
 		email.setRequired(true);
 		form.add(email);
 		return email;
 	}
 
-	private void createPasswordFields(Form<?> form) {
-		Map<String, Object> validationValues = new HashMap<>();
-		validationValues.put("min", 8);
-
-		PasswordTextField password = new PasswordTextField("password");
+	private void createPasswordFields(Form<UserRegistrationInfo> form) {
+		PasswordTextField password = new PasswordTextField("password", PropertyModel.of(form.getDefaultModelObject(), "password"));
 		password.setLabel(Model.of(getString("registration.password.label")));
-		password.add(AttributeModifier.replace("placeholder", getString("registration.password.placeholder", Model.ofMap(validationValues))));
-		password.add(StringValidator.minimumLength((int) validationValues.get("min")));
+		password.add(new PropertyValidator<>());
 		form.add(password);
 
 		PasswordTextField passwordRepeated = new PasswordTextField("passwordRepeated");

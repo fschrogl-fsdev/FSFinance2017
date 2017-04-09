@@ -16,6 +16,8 @@
  */
 package at.schrogl.fsfinance.persistence.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,6 +25,9 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import at.schrogl.fsfinance.persistence.dao.UserDAO;
 
@@ -31,11 +36,13 @@ import at.schrogl.fsfinance.persistence.dao.UserDAO;
 @NamedQueries({
 		@NamedQuery(name = UserDAO.NQ_findByUsername, query = "SELECT u FROM User u WHERE u.username = :username"),
 		@NamedQuery(name = UserDAO.NQ_findByEmail, query = "SELECT u FROM User u WHERE u.email = :email") })
-public class User {
+public class User implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private Long id;
 	private String username;
-	private String password;
+	private String passwordHash;
 	private String salt;
 	private String email;
 
@@ -44,7 +51,7 @@ public class User {
 
 	public User(String username, String password, String salt, String email) {
 		this.username = username;
-		this.password = password;
+		this.passwordHash = password;
 		this.salt = salt;
 		this.email = email;
 	}
@@ -60,6 +67,8 @@ public class User {
 		this.id = id;
 	}
 
+	@NotNull
+	@Size(min = 5, max = 25)
 	@Column(name = "usr_username", unique = true, nullable = false)
 	public String getUsername() {
 		return username;
@@ -69,15 +78,17 @@ public class User {
 		this.username = username;
 	}
 
-	@Column(name = "usr_password", nullable = false)
-	public String getPassword() {
-		return password;
+	@NotNull
+	@Column(name = "usr_passwordHash", nullable = false)
+	public String getPasswordHash() {
+		return passwordHash;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPasswordHash(String passwordHash) {
+		this.passwordHash = passwordHash;
 	}
 
+	@NotNull
 	@Column(name = "usr_salt", nullable = false)
 	public String getSalt() {
 		return salt;
@@ -87,6 +98,8 @@ public class User {
 		this.salt = salt;
 	}
 
+	@NotNull
+	@Pattern(regexp = ".+@.+")
 	@Column(name = "usr_email", unique = true, nullable = false)
 	public String getEmail() {
 		return email;

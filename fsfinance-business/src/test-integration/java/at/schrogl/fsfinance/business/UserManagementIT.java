@@ -96,7 +96,7 @@ public class UserManagementIT extends AbstractTransactionalTestNGSpringContextTe
 		em.flush();
 
 		Assert.assertNotNull(actualUser.getId());
-		Assert.assertNotNull(actualUser.getPassword());
+		Assert.assertNotNull(actualUser.getPasswordHash());
 		Assert.assertNotNull(actualUser.getSalt());
 		Assert.assertEquals(countRowsInTable(TABLENAME_USER), 2);
 	}

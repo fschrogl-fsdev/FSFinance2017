@@ -55,7 +55,7 @@ public class PasswordHasher {
 	public void populateUserSecrets(User newUser, String password) {
 		TRACE_LOG.debug("Generating salt and hashed password for {}", newUser);
 		newUser.setSalt(generateRandomSalt());
-		newUser.setPassword(hashPassword(password, newUser.getSalt()));
+		newUser.setPasswordHash(hashPassword(password, newUser.getSalt()));
 	}
 
 	public String generateRandomSalt() {

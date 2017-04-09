@@ -71,7 +71,7 @@ public class UserManagementTest {
 	private void configurePasswordHandlerMock() {
 		Mockito.doAnswer(invocationOnMock -> {
 			User newUser = (User) invocationOnMock.getArgument(0);
-			newUser.setPassword("hashedPassword");
+			newUser.setPasswordHash("hashedPassword");
 			newUser.setSalt("someSalt");
 			return null;
 		}).when(pwhMock).populateUserSecrets(Mockito.any(), Mockito.anyString());

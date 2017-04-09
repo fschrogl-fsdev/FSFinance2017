@@ -18,31 +18,25 @@ package at.schrogl.fsfinance.web.model;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import at.schrogl.fsfinance.persistence.entity.User;
+
 public class UserRegistrationInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-	private String username;
-	private String email;
+
+	private User user = new User();
 	private String password;
 	private String passwordRepeated;
 
-	public String getUsername() {
-		return username;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
+	@NotNull
+	@Size(min = 8, max = 30)
 	public String getPassword() {
 		return password;
 	}

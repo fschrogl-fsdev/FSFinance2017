@@ -96,7 +96,7 @@ public class PasswordHasherTest {
 		passwordHandler.populateUserSecrets(newUser, "123password");
 
 		Assert.assertFalse(newUser.getSalt() == null || newUser.getSalt().isEmpty(), "Salt must not be null or empty!");
-		Assert.assertFalse(newUser.getPassword() == null || newUser.getPassword().isEmpty(), "Password must not be null or empty!");
+		Assert.assertFalse(newUser.getPasswordHash() == null || newUser.getPasswordHash().isEmpty(), "Password must not be null or empty!");
 	}
 
 }

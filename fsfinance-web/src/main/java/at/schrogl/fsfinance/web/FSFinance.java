@@ -17,7 +17,7 @@
 package at.schrogl.fsfinance.web;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.bean.validation.BeanValidationConfiguration;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
@@ -29,11 +29,18 @@ public class FSFinance extends WebApplication {
 	@Override
 	protected void init() {
 		super.init();
-		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 
-		if (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT) {
+		switch (getConfigurationType()) {
+		case DEVELOPMENT:
 			getComponentPostOnBeforeRenderListeners().add(new StatelessChecker());
+			break;
+
+		case DEPLOYMENT:
+			break;
 		}
+
+		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
+		new BeanValidationConfiguration().configure(this);
 	}
 
 	@Override

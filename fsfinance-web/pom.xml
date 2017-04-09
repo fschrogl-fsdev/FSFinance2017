@@ -52,7 +52,7 @@
 			<artifactId>fsfinance-business</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<!-- Used to initialize Spring; see web.xml -->
 			<groupId>org.springframework</groupId>
@@ -68,6 +68,11 @@
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-spring</artifactId>
+			<version>${wicket.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-bean-validation</artifactId>
 			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>

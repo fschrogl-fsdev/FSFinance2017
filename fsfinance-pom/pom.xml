@@ -52,6 +52,7 @@
 		<version.postgresql>9.4.1212</version.postgresql>
 		<version.h2>1.4.194</version.h2>
 		<version.jpa>2.1.0</version.jpa>
+		<version.beanvalidation>1.1.0.Final</version.beanvalidation>
 	</properties>
 
 
@@ -247,6 +248,11 @@
 				<artifactId>hibernate-entitymanager</artifactId>
 				<version>${version.hibernate}</version>
 			</dependency>
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>${version.beanvalidation}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.postgresql</groupId>
@@ -295,6 +301,11 @@
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>javax.persistence</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
