@@ -16,12 +16,14 @@
  */
 package at.schrogl.fsfinance.web.page;
 
+import java.io.Serializable;
+
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.StatelessLink;
 
 import at.schrogl.fsfinance.web.page.template.TemplatePage;
 
-public class HomePage extends TemplatePage {
+public class HomePage extends TemplatePage<Serializable> {
 
 	private static final long serialVersionUID = 1L;
 

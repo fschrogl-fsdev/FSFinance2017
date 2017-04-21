@@ -2,31 +2,44 @@
 
 ## Open
 
-### US0001: Register as new user
+### US0002: Login/Logout to the service
 
 **Description**
 
-I want to be able to register myself as a new user.
+I can login to the service using a previously create user account. If I am logged in I can logout again.
 
-This includes:
+**Acceptance criteria**
 
-  * for registration a user should at least supply a unique username, first name, last name and a unique email address.
-  * an admin/superuser should be able to disable registration for new users enitrely
-  * the first account created should be granted superuser/admin privileges
+  * Login with valid user credentials is possible
+  * Login with invalid/non-existing user credentials is not possible
+  * Logout is working and terminates a user's session
+  * Restricted pages can only be accessed if a user is logged in
 
-**Acceptance tests**
+### US0003: Delete ones own user account
 
-After successful registration a user should be:
+**Description**
 
-  * logged in and redirected to his/her dashboard
-  * new user entry added to the database
-  
-### US0002: Login/Logout to the service
+If I am logged in I can delete my user account. After successful account deletion I am logged out.
 
-### US0003: Delete one user account
+**Acceptance criteria**
 
-### US0004: Update/Modify my user profile
+  * Current user passwords needs to be entered before the user's account is deleted actually
+  * Deletion of a user account also deletes all other data belonging to this user
+  * Logging into the service with credentials from a previously deleted user is not possible
 
-### US0005: (Admin) User account management
+### USXXXX: Update/Modify my user profile
+
+### USXXXX: (Admin) User account management
 
 ## Closed
+
+### <del>US0001: Register a new user account</del>
+
+**Description**
+
+I want to be able to sign up to the service by creating a new user account.
+
+**Acceptance criteria**
+
+  * After successfull registration the user's credentials are persisted in the database
+  * Registration of an already existing user is not possible

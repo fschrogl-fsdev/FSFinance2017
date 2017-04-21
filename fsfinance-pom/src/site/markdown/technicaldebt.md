@@ -2,9 +2,7 @@
 
 ## Open
 
-### TD0001: Evalute Maven changes plugin
-
-Evalute the maven changes plugin to see if it's worth integrating in this projects build.
+### TD0001: Evalute Maven changelog plugin
 
 ### TD0002: Configure Maven Surefire Reports plugin
 

@@ -80,6 +80,11 @@
 			<artifactId>wicket-devutils</artifactId>
 			<version>${wicket.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.wicketeer</groupId>
+			<artifactId>wicket-modelfactory</artifactId>
+			<version>7.9.16</version>
+		</dependency>
 	</dependencies>
 
 </project>

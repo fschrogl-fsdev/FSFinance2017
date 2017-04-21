@@ -88,6 +88,13 @@
 		</dependency>
 
 		<dependency>
+			<!-- Needed for JavaDoc creation -->
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		
+		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<scope>test</scope>

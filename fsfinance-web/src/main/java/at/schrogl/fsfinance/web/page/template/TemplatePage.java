@@ -16,13 +16,18 @@
  */
 package at.schrogl.fsfinance.web.page.template;
 
+import java.io.Serializable;
+
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
-public abstract class TemplatePage extends WebPage {
+public abstract class TemplatePage<T extends Serializable> extends WebPage {
 
 	private static final long serialVersionUID = 1L;
 
+	protected IModel<T> pageModel;
 	protected HeaderPanel header;
 	protected FooterPanel footer;
 
@@ -41,6 +46,22 @@ public abstract class TemplatePage extends WebPage {
 
 	protected void setPageTitle(String title) {
 		add(new Label("title", title));
+	}
+
+	protected IModel<T> getPageModel() {
+		return pageModel;
+	}
+
+	protected void setPageModel(IModel<T> pageModel) {
+		this.pageModel = pageModel;
+	}
+
+	protected T getPageModelObject() {
+		return pageModel.getObject();
+	}
+
+	protected void setPageModelObject(T pageModelObject) {
+		this.pageModel = Model.of(pageModelObject);
 	}
 
 }

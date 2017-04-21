@@ -35,7 +35,11 @@ public class HeaderPanel extends Panel {
 	protected void onInitialize() {
 		super.onInitialize();
 
-		add(new StatelessLink<Void>("link-logo") {
+		createLogoLink();
+	}
+
+	private void createLogoLink() {
+		StatelessLink<Void> logoLink = new StatelessLink<Void>("link-logo") {
 
 			private static final long serialVersionUID = 1L;
 
@@ -43,7 +47,8 @@ public class HeaderPanel extends Panel {
 			public void onClick() {
 				setResponsePage(HomePage.class);
 			}
-		});
+		};
+		add(logoLink);
 	}
 
 }
