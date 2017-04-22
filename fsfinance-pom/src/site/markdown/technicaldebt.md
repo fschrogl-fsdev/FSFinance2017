@@ -21,14 +21,11 @@ Maven Site build.
 
 https://flywaydb.org/
 
-### TD0005: Refactor/Move integration tests to separate Maven module
-
-It may be cleaner that way and also reduce pom.xml size.
-
-
 ### TD0006: Custom Annotations for Spring's @Component
 
 Create custom annotations based on @Component for clearer meaning of what a bean's
 purpose is. For instance: @BusinessManager, @Helper, etc.
 
 ## Closed
+
+### <del>TD0005: Refactor/Move integration tests to separate Maven module</del>

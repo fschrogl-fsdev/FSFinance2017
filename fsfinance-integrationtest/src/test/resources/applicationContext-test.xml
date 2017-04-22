@@ -19,7 +19,7 @@
 	<beans>
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
 			<property name="driverClassName" value="org.h2.Driver" />
-			<property name="url" value="jdbc:h2:mem:fsfinanceDbTest;DB_CLOSE_DELAY=-1" />
+			<property name="url" value="jdbc:h2:mem:fsfinanceDbIntegrationTest;DB_CLOSE_DELAY=-1" />
 			<property name="username" value="sa" />
 			<property name="password" value="" />
 			<property name="suppressClose" value="true" />
@@ -27,7 +27,7 @@
 	
 		<bean id="entityManager" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 			<property name="dataSource" ref="dataSource"/>
-			<property name="packagesToScan" value="at.schrogl.fsfinance.persistence.model" />
+			<property name="packagesToScan" value="at.schrogl.fsfinance.persistence.entity" />
 			<property name="persistenceProviderClass" value="org.hibernate.jpa.HibernatePersistenceProvider" />
 			<property name="jpaProperties">
 		        <props>

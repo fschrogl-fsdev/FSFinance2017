@@ -15,21 +15,22 @@
 		<relativePath>../fsfinance-pom/pom.xml</relativePath>
 	</parent>
 
-	<artifactId>fsfinance-persistence</artifactId>
+	<artifactId>fsfinance-integrationtest</artifactId>
 	<packaging>jar</packaging>
 
-	<!-- ====================================================================== -->
-	<!-- Dependencies -->
-	<!-- ====================================================================== -->
+	<properties>
+	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
+			<groupId>at.schrogl.fsfinance</groupId>
+			<artifactId>fsfinance-persistence</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
+			<groupId>at.schrogl.fsfinance</groupId>
+			<artifactId>fsfinance-business</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>

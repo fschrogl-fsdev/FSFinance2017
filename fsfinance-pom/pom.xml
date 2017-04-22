@@ -8,18 +8,10 @@
 	<!-- GENERAL PROJECT INFORMATION -->
 	<!-- ====================================================================== -->
 
-	<!-- Project Configuration -->
 	<groupId>at.schrogl.fsfinance</groupId>
 	<artifactId>fsfinance-pom</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-
-	<!-- Sub-Projects -->
-	<modules>
-		<module>../fsfinance-persistence</module>
-		<module>../fsfinance-business</module>
-		<module>../fsfinance-web</module>
-	</modules>
 
 	<properties>
 		<!-- Build Properties -->
@@ -38,12 +30,11 @@
 		<version.maven-source-plugin>3.0.0</version.maven-source-plugin>
 		<version.maven-war-plugin>2.6</version.maven-war-plugin>
 		<version.maven-jar-plugin>2.6</version.maven-jar-plugin>
-		<version.maven-changes-plugin>2.11</version.maven-changes-plugin>
 		<version.maven-surefire-plugin>2.19.1</version.maven-surefire-plugin>
 		<version.maven-failsafe-plugin>2.19.1</version.maven-failsafe-plugin>
-		<version.maven-buildhelper-plugin>3.0.0</version.maven-buildhelper-plugin>
+		<version.hibernate-maven-plugin>2.0.0</version.hibernate-maven-plugin>
 
-		<!-- Framework/Library Verisons -->
+		<!-- Framework/Library Versions -->
 		<version.spring>4.3.5.RELEASE</version.spring>
 		<version.testng>6.10</version.testng>
 		<version.mockito>2.7.19</version.mockito>
@@ -55,14 +46,11 @@
 		<version.beanvalidation>1.1.0.Final</version.beanvalidation>
 	</properties>
 
-
-	<!-- Source Control Management -->
 	<scm>
 		<developerConnection>scm:git:https://git.schrogl.at/gitblit/r/private/${project.name}.git</developerConnection>
 		<url>https://git.schrogl.at/gitblit/r/private/${project.name}.git</url>
 	</scm>
 
-	<!-- Project Deployment -->
 	<distributionManagement>
 		<repository>
 			<id>atom-nexus</id>
@@ -76,20 +64,9 @@
 		</site>
 	</distributionManagement>
 
-	<!-- Issue Management -->
-	<issueManagement>
-		<system>Mantis</system>
-		<url>https://git.schrogl.at/mantisbt/</url>
-	</issueManagement>
-
-	<!-- ====================================================================== -->
-	<!-- BUILD CONFIGURATION -->
-	<!-- ====================================================================== -->
-
 	<build>
 		<plugins>
 			<plugin>
-				<!-- Compiler Plugin -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${version.maven-compiler-plugin}</version>
@@ -98,44 +75,7 @@
 					<target>${compiler.version.target}</target>
 				</configuration>
 			</plugin>
-
 			<plugin>
-				<!-- Build Helper Plugin -->
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>${version.maven-buildhelper-plugin}</version>
-				<executions>
-					<execution>
-						<id>add-test-source</id>
-						<phase>generate-test-sources</phase>
-						<goals>
-							<goal>add-test-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>src/test-integration/java/</source>
-							</sources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>add-test-resource</id>
-						<phase>generate-test-resources</phase>
-						<goals>
-							<goal>add-test-resource</goal>
-						</goals>
-						<configuration>
-							<resources>
-								<resource>
-									<directory>src/test-integration/resources</directory>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<!-- License Header Plugin -->
 				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>
 				<version>${version.maven-license-plugin}</version>
@@ -149,12 +89,11 @@
 					<includes>
 						<include>src/main/java/**/*.java</include>
 						<include>src/test/java/**/*.java</include>
-						<include>src/test-integration/java/**/*.java</include>
 					</includes>
 				</configuration>
 				<executions>
 					<execution>
-						<phase>process-classes</phase>
+						<phase>process-sources</phase>
 						<goals>
 							<goal>format</goal>
 						</goals>
@@ -163,7 +102,6 @@
 			</plugin>
 
 			<plugin>
-				<!-- Javadoc Plugin -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>${version.maven-javadoc-plugin}</version>
@@ -185,16 +123,102 @@
 	</build>
 
 	<!-- ====================================================================== -->
-	<!-- RELEASE/DEPLOYMENT CONFIGURATION -->
+	<!-- PROFILES -->
 	<!-- ====================================================================== -->
 
 	<profiles>
+
+		<!-- Profile: default -->
 		<profile>
-			<id>jenkins-release</id>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<skipTests>true</skipTests>
+			</properties>
+			<modules>
+				<module>../fsfinance-persistence</module>
+				<module>../fsfinance-business</module>
+				<module>../fsfinance-web</module>
+			</modules>
 			<build>
+				<defaultGoal>clean package</defaultGoal>
+			</build>
+		</profile>
+
+		<!-- Profile: database -->
+		<profile>
+			<id>database</id>
+			<properties>
+				<skipTests>true</skipTests>
+			</properties>
+			<modules>
+				<module>../fsfinance-persistence</module>
+			</modules>
+			<build>
+				<defaultGoal>clean process-classes</defaultGoal>
 				<plugins>
 					<plugin>
-						<!-- Failsafe Plugin (execute Integration Tests) -->
+						<groupId>de.juplo</groupId>
+						<artifactId>hibernate-maven-plugin</artifactId>
+						<version>${version.hibernate-maven-plugin}</version>
+						<executions>
+							<execution>
+								<phase>process-classes</phase>
+								<goals>
+									<goal>create</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<!-- Only create DDL script, don't actually create database -->
+							<export>false</export>
+
+							<!-- Show DDL script in Maven's output and make it pretty -->
+							<show>true</show>
+							<format>true</format>
+							<outputFile>${project.build.directory}/ddl/schema-${project.version}.sql</outputFile>
+
+							<!-- Database dialect to use and classes to scan for JPA annotations -->
+							<dialect>org.hibernate.dialect.PostgreSQLDialect</dialect>
+							<driver>org.postgresql.Driver</driver>
+							<scanClasses>true</scanClasses>
+							<scanDependencies>none</scanDependencies>
+							<scanTestClasses>false</scanTestClasses>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<!-- Profile: continuous -->
+		<profile>
+			<id>continuous</id>
+			<modules>
+				<module>../fsfinance-persistence</module>
+				<module>../fsfinance-business</module>
+				<module>../fsfinance-web</module>
+				<module>../fsfinance-integrationtest</module>
+			</modules>
+			<build>
+				<defaultGoal>clean install</defaultGoal>
+			</build>
+		</profile>
+
+		<!-- Profile: continuous-integration -->
+		<profile>
+			<id>continuous-integration</id>
+			<modules>
+				<module>../fsfinance-persistence</module>
+				<module>../fsfinance-business</module>
+				<module>../fsfinance-web</module>
+				<module>../fsfinance-integrationtest</module>
+			</modules>
+			<build>
+				<defaultGoal>clean verify site</defaultGoal>
+				<plugins>
+					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-failsafe-plugin</artifactId>
 						<version>${version.maven-failsafe-plugin}</version>
@@ -204,12 +228,15 @@
 								<phase>test</phase>
 								<goals>
 									<goal>integration-test</goal>
+									<goal>verify</goal>
 								</goals>
 							</execution>
 						</executions>
+						<configuration>
+							<parallel>methods</parallel>
+						</configuration>
 					</plugin>
 					<plugin>
-						<!-- Release Plugin -->
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-release-plugin</artifactId>
 						<version>${version.maven-release-plugin}</version>
@@ -317,14 +344,12 @@
 	<!-- Site Configuration -->
 	<reporting>
 		<plugins>
-			<!-- Site Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>${version.maven-javadoc-plugin}</version>
 			</plugin>
 
-			<!-- Javadoc Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
@@ -335,7 +360,6 @@
 				</configuration>
 			</plugin>
 
-			<!-- Report Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
@@ -359,7 +383,6 @@
 		</plugins>
 	</reporting>
 
-	<!-- Project License Information (Report) -->
 	<licenses>
 		<license>
 			<name>GNU General Public License (GPL), Version 3.0</name>
@@ -369,20 +392,18 @@
 		</license>
 	</licenses>
 
-	<!-- Project Organization Information (Report) -->
 	<organization>
-		<name>FSDev Ltd</name>
+		<name>FSDev</name>
 		<url>http://www.schrogl.at</url>
 	</organization>
 
-	<!-- Project Developer Information (Report) -->
 	<developers>
 		<developer>
-			<id>-</id>
+			<id>1</id>
 			<name>Fritz</name>
 			<email>fsdev@schrogl.at</email>
 			<url>http://fritz.schrogl.at</url>
-			<organization>FSDev Ltd</organization>
+			<organization>FSDev</organization>
 			<organizationUrl>http://www.schrogl.at</organizationUrl>
 			<roles>
 				<role>architect</role>

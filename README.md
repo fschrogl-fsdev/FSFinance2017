@@ -19,3 +19,34 @@ file. The projects pom.xml files and Spring configuration must be modified and t
 application rebuild if running inside a different environment.
 
 For further information see fsfinance-pom/src/site/markdown/gettingstarted.md
+
+### Project structure and build
+
+The project is split up into several sub-modules. The parent project is fsfinance-pom,
+from which a full build can be started using Maven:
+
+	// Full build without execution of unit tests
+	mvn
+
+	// Full build with execution of unit tests
+	mvn -DskipTests=false
+
+	// Generate project's site documentation
+	mvn site
+
+#### Generate database schema DDL
+
+There's a special build profile which can be utilized to generate a database schema DDL
+script. The script will be placed in <i>fsfinance-persistence/target/ddl</i>.
+
+	// Generate database schema ddl
+	mvn -P database
+
+####  Run integration tests
+
+Integration tests are not run by default (not compiled even), because they are meant
+to be executed during continuous integration where the environment is properly set up
+for them. Nonetheless they can also be executed locale using another Maven profile:
+
+	// Execute integration tests
+	mvn -P continuous-integration
