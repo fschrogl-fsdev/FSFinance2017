@@ -42,7 +42,7 @@ script. The script will be placed in <i>fsfinance-persistence/target/ddl</i>.
 	// Generate database schema ddl
 	mvn -P database
 
-####  Run integration tests
+#### Run integration tests
 
 Integration tests are not run by default (not compiled even), because they are meant
 to be executed during continuous integration where the environment is properly set up
@@ -50,3 +50,13 @@ for them. Nonetheless they can also be executed locale using another Maven profi
 
 	// Execute integration tests
 	mvn -P continuous-integration
+
+#### Maven License Plugin
+
+The Mycila Maven license plugin is used to add a license header to each Java file
+during Maven's <i>process-sources<i> phase. The license used is AGPL-3.0. It is
+also possible to execute the license plugin on its own:
+
+  // Add/Remove license header from each Java file
+  mvn license:format
+  mvn license:remove

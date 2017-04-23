@@ -24,7 +24,7 @@
 		<version.maven-compiler-plugin>3.5.1</version.maven-compiler-plugin>
 		<version.maven-javadoc-plugin>2.10.3</version.maven-javadoc-plugin>
 		<version.maven-project-info-reports-plugin>2.9</version.maven-project-info-reports-plugin>
-		<version.maven-license-plugin>2.11</version.maven-license-plugin>
+		<version.maven-license-plugin>3.0</version.maven-license-plugin>
 		<version.maven-release-plugin>2.5.3</version.maven-release-plugin>
 		<version.maven-deploy-plugin>2.8.2</version.maven-deploy-plugin>
 		<version.maven-source-plugin>3.0.0</version.maven-source-plugin>
@@ -80,16 +80,19 @@
 				<artifactId>license-maven-plugin</artifactId>
 				<version>${version.maven-license-plugin}</version>
 				<configuration>
-					<header>${project.basedir}/HEADING</header>
-					<keywords>
-						<keyword>GNU General Public License</keyword>
-					</keywords>
+					<header>com/mycila/maven/plugin/license/templates/AGPL-3.txt</header>
+					<properties>
+						<project.name>FSFinance</project.name>
+						<project.description>WebApp to track daily expenses</project.description>
+						<project.inceptionYear>2017</project.inceptionYear>
+						<owner>Fritz Schrogl</owner>
+						<email>fsdev@schrogl.at</email>
+					</properties>
 					<skipExistingHeaders>true</skipExistingHeaders>
 					<strictCheck>true</strictCheck>
 					<includes>
-						<include>src/main/java/**/*.java</include>
-						<include>src/test/java/**/*.java</include>
-					</includes>
+						<include>**/*.java</include>
+					</includes>					
 				</configuration>
 				<executions>
 					<execution>
@@ -141,6 +144,7 @@
 				<module>../fsfinance-persistence</module>
 				<module>../fsfinance-business</module>
 				<module>../fsfinance-web</module>
+				<module>../fsfinance-integrationtest</module>
 			</modules>
 			<build>
 				<defaultGoal>clean package</defaultGoal>
